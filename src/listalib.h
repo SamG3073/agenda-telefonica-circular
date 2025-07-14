@@ -1,9 +1,6 @@
 #ifndef _LISTALIB_H
 #define _LISTALIB_H
 
-#include <stddef.h>
-#include <stdbool.h>
-
 typedef unsigned char byte;
 typedef struct {
     void *anterior;
