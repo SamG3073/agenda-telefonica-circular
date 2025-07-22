@@ -58,7 +58,11 @@ int main(int argc, char *argv[]) {
         SDL_SetRenderDrawColor(renderizador, COR_VERMELHA.r, COR_VERMELHA.g, COR_VERMELHA.b, COR_VERMELHA.a); // Define a cor do cabeçalho
         SDL_Rect retangulo_cabecalho = {0, 0, 360, 56}; // Retângulo do cabeçalho
         SDL_RenderFillRect(renderizador, &retangulo_cabecalho); // Preenche o retângulo do cabeçalho
-        renderizarTexto(renderizador, fonte_cabecalho, "Agenda de Contatos", COR_BRANCA, 15, 18); // Renderiza o texto do cabeçalho
+        renderizarTexto(renderizador, fonte_cabecalho, "Agenda de Contatos", COR_BRANCA, 15, 18);
+        renderizarTexto(renderizador, fonte_numeroContato, "TODOS", COR_BRANCA, 20, 60);
+        renderizarTexto(renderizador, fonte_numeroContato, "AMIGOS", COR_CINZA, 90, 60);
+        renderizarTexto(renderizador, fonte_numeroContato, "FAMILIA", COR_CINZA, 160, 60);
+        renderizarTexto(renderizador, fonte_numeroContato, "TRABALHO", COR_CINZA, 230, 60);
         SDL_RenderPresent(renderizador); // Apresenta o renderizador na tela
         SDL_Delay(16);
     }
