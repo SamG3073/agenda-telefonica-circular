@@ -154,11 +154,11 @@ int main(int argc, char *argv[]) {
                 break;
         }
 
-        SDL_RenderPresent(renderizador);
-        SDL_Delay(16);
+        SDL_RenderPresent(renderizador); // Atualiza a tela renderizada
+        SDL_Delay(16); 
     }
 
-    // --- Finalização e Limpeza ---
+    // Libera as texturas dos ícones
     if (contatos.primeiro) {
         ElementoLista *elementoAtual = contatos.primeiro;
         for (unsigned int i = 0; i < contatos.numElementos; i++) {
@@ -170,21 +170,25 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    Lista_Destruir(&contatos);
+    Lista_Destruir(&contatos); // Libera a lista de contatos
 
+    // Libera as texturas dos ícones da interface do usuário
     SDL_DestroyTexture(icones_ui.telefone);
     SDL_DestroyTexture(icones_ui.whatsapp);
     SDL_DestroyTexture(icones_ui.sms);
     SDL_DestroyTexture(icones_ui.facebook);
     SDL_DestroyTexture(icones_ui.gmail);
 
+    // Libera as fontes
     TTF_CloseFont(fonte_cabecalho);
     TTF_CloseFont(fonte_nomeContato);
     TTF_CloseFont(fonte_numeroContato);
 
+    // Libera o renderizador e a janela
     SDL_DestroyRenderer(renderizador);
     SDL_DestroyWindow(janela);
     
+    // Finaliza o SDL, TTF e IMG
     IMG_Quit();
     TTF_Quit();
     SDL_Quit();
