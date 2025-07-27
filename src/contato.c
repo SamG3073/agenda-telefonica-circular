@@ -11,6 +11,7 @@ const SDL_Color COR_DESTAQUE = {60, 60, 80, 255};
 
 SDL_Texture* carregarTextura(SDL_Renderer *renderizador, const char* caminho) {
     SDL_Texture* novaTextura = IMG_LoadTexture(renderizador, caminho);
+    // Verifica se a textura foi carregada corretamente
     if (novaTextura == NULL) {
         printf("Falha ao carregar a imagem %s! Erro do SDL_image: %s\n", caminho, IMG_GetError());
     }
@@ -19,20 +20,22 @@ SDL_Texture* carregarTextura(SDL_Renderer *renderizador, const char* caminho) {
 
 void renderizarTexto(SDL_Renderer *renderizador, TTF_Font *fonte, const char *texto, SDL_Color cor, int x, int y) {
     SDL_Surface *superficie = TTF_RenderUTF8_Blended(fonte, texto, cor);
+    // Verifica se a superfície foi criada corretamente
     if (!superficie) {
         printf("Falha ao renderizar texto: %s\n", TTF_GetError());
         return;
     }
     SDL_Texture *textura = SDL_CreateTextureFromSurface(renderizador, superficie);
+    // Verifica se a textura foi criada corretamente
     if (!textura) {
         printf("Falha ao criar textura do texto: %s\n", SDL_GetError());
         SDL_FreeSurface(superficie);
         return;
     }
-    SDL_Rect retangulo = {x, y, superficie->w, superficie->h};
-    SDL_RenderCopy(renderizador, textura, NULL, &retangulo);
-    SDL_FreeSurface(superficie);
-    SDL_DestroyTexture(textura);
+    SDL_Rect retangulo = {x, y, superficie->w, superficie->h}; // Define o retângulo onde o texto será renderizado
+    SDL_RenderCopy(renderizador, textura, NULL, &retangulo); // Renderiza a textura do texto
+    SDL_FreeSurface(superficie); // Libera a superfície após o uso
+    SDL_DestroyTexture(textura); // Libera a textura após o uso
 }
 
 void renderizarTextoCentralizado(SDL_Renderer *renderizador, TTF_Font *fonte, const char *texto, SDL_Color cor, int y) {
@@ -43,7 +46,7 @@ void renderizarTextoCentralizado(SDL_Renderer *renderizador, TTF_Font *fonte, co
         SDL_FreeSurface(superficie);
         return;
     }
-    int x = (360 - superficie->w) / 2;
+    int x = (360 - superficie->w) / 2; // Centraliza o texto na largura da janela
     SDL_Rect retangulo = {x, y, superficie->w, superficie->h};
     SDL_RenderCopy(renderizador, textura, NULL, &retangulo);
     SDL_FreeSurface(superficie);
@@ -51,26 +54,30 @@ void renderizarTextoCentralizado(SDL_Renderer *renderizador, TTF_Font *fonte, co
 }
 
 void renderizarContato(SDL_Renderer *renderizador, TTF_Font *fonte_nome, TTF_Font *fonte_num, Contato *contato, int y_offset, bool selecionado, UI_Icones *icones) {
-    SDL_Rect retangulo_fundo = {0, y_offset, 360, 80};
+    SDL_Rect retangulo_fundo = {0, y_offset, 360, 80}; // Define o retângulo de fundo do contato
 
+    // Define a cor do fundo com base no estado de seleção
     if (selecionado) {
         SDL_SetRenderDrawColor(renderizador, COR_DESTAQUE.r, COR_DESTAQUE.g, COR_DESTAQUE.b, COR_DESTAQUE.a);
     } else {
         SDL_SetRenderDrawColor(renderizador, 40, 40, 40, 255);
     }
-    SDL_RenderFillRect(renderizador, &retangulo_fundo);
+    SDL_RenderFillRect(renderizador, &retangulo_fundo); // Preenche o retângulo de fundo
 
+    // Renderiza a imagem do perfil do contato, se existente
     if (contato->texturaPerfil) {
         SDL_Rect retangulo_perfil = {20, y_offset + 15, 50, 50};
         SDL_RenderCopy(renderizador, contato->texturaPerfil, NULL, &retangulo_perfil);
     }
     
+    // Renderiza o nome e telefone do contato
     renderizarTexto(renderizador, fonte_nome, contato->nome, COR_BRANCA, 90, y_offset + 15);
     renderizarTexto(renderizador, fonte_num, contato->telefone, COR_CINZA, 90, y_offset + 45);
 
-    int icone_y_centro = y_offset + 40;
-    int icone_tamanho = 28;
+    int icone_y_centro = y_offset + 40; // Centraliza os ícones verticalmente
+    int icone_tamanho = 28; // Define o tamanho dos ícones
 
+    // Renderiza os ícones de contato
     if (icones->whatsapp) {
         SDL_Rect rect_whatsapp = {250, icone_y_centro - icone_tamanho / 2, icone_tamanho, icone_tamanho};
         SDL_RenderCopy(renderizador, icones->whatsapp, NULL, &rect_whatsapp);
@@ -81,8 +88,9 @@ void renderizarContato(SDL_Renderer *renderizador, TTF_Font *fonte_nome, TTF_Fon
         SDL_RenderCopy(renderizador, icones->telefone, NULL, &rect_telefone);
     }
 
-    renderizarIconeOpcoes(renderizador, 335, icone_y_centro, 3, 8); 
+    renderizarIconeOpcoes(renderizador, 335, icone_y_centro, 3, 8);
 
+    // Desenha uma linha de separação se o contato não estiver selecionado
     if (!selecionado) {
         SDL_SetRenderDrawColor(renderizador, 60, 60, 60, 255);
         SDL_RenderDrawLine(renderizador, 0, y_offset + 79, 360, y_offset + 79);
@@ -90,33 +98,37 @@ void renderizarContato(SDL_Renderer *renderizador, TTF_Font *fonte_nome, TTF_Fon
 }
 
 void renderizarDetalheContato(SDL_Renderer *renderizador, TTF_Font *fonte_nome, TTF_Font *fonte_num, TTF_Font* fonte_cabecalho, Contato *contato, UI_Icones *icones) {
-    SDL_SetRenderDrawColor(renderizador, COR_ESCURA.r, COR_ESCURA.g, COR_ESCURA.b, COR_ESCURA.a);
-    SDL_RenderClear(renderizador);
+    SDL_SetRenderDrawColor(renderizador, COR_ESCURA.r, COR_ESCURA.g, COR_ESCURA.b, COR_ESCURA.a); // Define a cor de fundo
+    SDL_RenderClear(renderizador); // Limpa a tela com a cor de fundo
 
+    // Renderiza o cabeçalho da tela de detalhes
     SDL_SetRenderDrawColor(renderizador, COR_VERMELHA.r, COR_VERMELHA.g, COR_VERMELHA.b, COR_VERMELHA.a);
     SDL_Rect retangulo_cabecalho = {0, 0, 360, 56};
     SDL_RenderFillRect(renderizador, &retangulo_cabecalho);
     renderizarTexto(renderizador, fonte_cabecalho, "Detalhes do Contato", COR_BRANCA, 15, 18);
 
+    // Renderiza o círculo de perfil do contato
     if (contato->texturaPerfil) {
         SDL_Rect retangulo_perfil_grande = {105, 90, 150, 150};
         SDL_RenderCopy(renderizador, contato->texturaPerfil, NULL, &retangulo_perfil_grande);
     }
 
+    // Renderiza o nome, telefone e email do contato
     renderizarTextoCentralizado(renderizador, fonte_nome, contato->nome, COR_BRANCA, 260);
     renderizarTextoCentralizado(renderizador, fonte_num, contato->telefone, COR_CINZA, 290);
     renderizarTextoCentralizado(renderizador, fonte_num, contato->email, COR_CINZA, 320);
  
-    int y_icones = 380;
-    int tamanho_icone = 48;
-    int espaco_entre_icones = (360 - (5 * tamanho_icone)) / 6;
-    int x_atual = espaco_entre_icones;
+    int y_icones = 380; // Define a posição Y para os ícones
+    int tamanho_icone = 48; // Define o tamanho dos ícones
+    int espaco_entre_icones = (360 - (5 * tamanho_icone)) / 6; // Calcula o espaço entre os ícones
+    int x_atual = espaco_entre_icones; // Posição inicial X para os ícones
 
+    // Renderiza os ícones de contato na parte inferior
     if (icones->sms) {
         SDL_Rect rect_sms = {x_atual, y_icones, tamanho_icone, tamanho_icone};
         SDL_RenderCopy(renderizador, icones->sms, NULL, &rect_sms);
     }
-    x_atual += tamanho_icone + espaco_entre_icones;
+    x_atual += tamanho_icone + espaco_entre_icones; // Incrementa a posição X para o próximo ícone
 
     if (icones->whatsapp) {
         SDL_Rect rect_whatsapp = {x_atual, y_icones, tamanho_icone, tamanho_icone};
@@ -145,8 +157,9 @@ void renderizarDetalheContato(SDL_Renderer *renderizador, TTF_Font *fonte_nome, 
 void renderizarCirculoPreenchido(SDL_Renderer *renderizador, int centroX, int centroY, int raio) {
     for (int y = -raio; y <= raio; y++) {
         for (int x = -raio; x <= raio; x++) {
+            // Verifica se o ponto (x, y) está dentro do círculo
             if (pow(x, 2) + pow(y, 2) <= pow(raio, 2)) {
-                SDL_RenderDrawPoint(renderizador, centroX + x, centroY + y);
+                SDL_RenderDrawPoint(renderizador, centroX + x, centroY + y); // Desenha o ponto no círculo
             }
         }
     }
@@ -154,6 +167,7 @@ void renderizarCirculoPreenchido(SDL_Renderer *renderizador, int centroX, int ce
 
 void renderizarIconeOpcoes(SDL_Renderer *renderizador, int x, int y, int raioPonto, int espacamento) {
     SDL_SetRenderDrawColor(renderizador, COR_CINZA.r, COR_CINZA.g, COR_CINZA.b, COR_CINZA.a);
+    // Desenha três pontos verticais para o ícone de opções
     renderizarCirculoPreenchido(renderizador, x, y - espacamento, raioPonto);
     renderizarCirculoPreenchido(renderizador, x, y, raioPonto);
     renderizarCirculoPreenchido(renderizador, x, y + espacamento, raioPonto);
