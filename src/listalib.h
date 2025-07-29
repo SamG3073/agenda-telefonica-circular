@@ -37,6 +37,7 @@ void Lista_Avancar(Lista *lista);
 void Lista_Retroceder(Lista *lista);
 void Lista_Inserir(Lista *lista, void *dados);
 void Lista_RemoverUltimo(Lista *lista);
+void Lista_RemoverElemento(Lista *lista, ElementoLista *elementoARemover); // Nova função
 void Lista_Esvaziar(Lista *lista);
 
 void ElementoLista_Dump(ElementoLista *elemento, size_t tamanhoDados);

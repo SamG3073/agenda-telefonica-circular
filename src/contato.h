@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
+#include "app_types.h" // Inclui as definições de tipo compartilhadas
 
 // Definição das cores globais
 extern const SDL_Color COR_VERMELHA;
@@ -20,6 +21,7 @@ typedef struct {
     char email[100];
     char caminhoImagem[128];
     SDL_Texture *texturaPerfil;
+    GrupoContato grupo; // Este tipo agora vem de app_types.h
 } Contato;
 
 // Estrutura para armazenar os ícones da interface do usuário
@@ -31,36 +33,19 @@ typedef struct {
     SDL_Texture *facebook;
 } UI_Icones;
 
-// Enum para gerenciar os estados da aplicação
-typedef enum {
-    ESTADO_LISTA,
-    ESTADO_DETALHE
-} EstadoAplicacao;
+// Declaração das Funções
 
-// |________________________|
-// | Declaração das Funções |
-// |------------------------|
+// Funções de renderização da UI
+void renderizarContato(SDL_Renderer *renderizador, TTF_Font *fonte_nome, TTF_Font *fonte_num, Contato *contato, int y_offset, bool selecionado, UI_Icones *icones, int x, int w, int h);
+void renderizarDetalheContato(SDL_Renderer *renderizador, TTF_Font *fonte_nome, TTF_Font *fonte_num, TTF_Font *fonte_cabecalho, Contato *contato, UI_Icones *icones, int w, int h);
+void renderizarFormulario(SDL_Renderer* r, TTF_Font* f_cabecalho, TTF_Font* f_form, FormularioContato* form, bool cursorVisivel, const char* msgErro, int w, int h);
+void renderizarDialogoConfirmacao(SDL_Renderer* r, TTF_Font* f_cabecalho, TTF_Font* f_texto, const char* nomeContato, int w, int h);
 
-
-// Função para renderizar um contato na lista
-void renderizarContato(SDL_Renderer *renderizador, TTF_Font *fonte_nome, TTF_Font *fonte_num, Contato *contato, int y_offset, bool selecionado, UI_Icones *icones);
-
-// Função para renderizar a tela de detalhes do contato
-void renderizarDetalheContato(SDL_Renderer *renderizador, TTF_Font *fonte_nome, TTF_Font *fonte_num, TTF_Font *fonte_cabecalho, Contato *contato, UI_Icones *icones);
-
-// Função para carregar uma textura a partir de um caminho da imagem
+// Funções utilitárias de renderização
 SDL_Texture* carregarTextura(SDL_Renderer *renderizador, const char* caminho);
-
-// Função para renderizar texto na tela
 void renderizarTexto(SDL_Renderer *renderizador, TTF_Font *fonte, const char *texto, SDL_Color cor, int x, int y);
-
-// Função para renderizar texto centralizado na tela
-void renderizarTextoCentralizado(SDL_Renderer *renderizador, TTF_Font *fonte, const char *texto, SDL_Color cor, int y);
-
-// Função para renderizar um círculo preenchido
+void renderizarTextoCentralizado(SDL_Renderer *renderizador, TTF_Font *fonte, const char *texto, SDL_Color cor, int w, int y);
 void renderizarCirculoPreenchido(SDL_Renderer *renderizador, int centroX, int centroY, int raio);
-
-// Função para renderizar um ícone de opções
 void renderizarIconeOpcoes(SDL_Renderer *renderizador, int x, int y, int raioPonto, int espacamento);
 
 #endif // CONTATO_H

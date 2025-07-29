@@ -4,6 +4,8 @@
 #include <string.h>
 #include "listalib.h"
 
+// ... (funções existentes: Lista_Criar até Lista_RemoverUltimo) ...
+
 void Lista_Criar(Lista *lista, size_t tamanhoElemento, bool duplamenteEncadeada, bool circular) {
     if(lista->criada) {
         printf("Lista já existe.\n");
@@ -253,6 +255,44 @@ void Lista_RemoverUltimo(Lista *lista) {
     }
     else printf("Lista vazia.\n");
 }
+
+
+void Lista_RemoverElemento(Lista *lista, ElementoLista *elementoARemover) {
+    if (!lista || !elementoARemover || lista->numElementos == 0) {
+        return;
+    }
+
+    // Caso 1: A lista só tem um elemento
+    if (lista->numElementos == 1) {
+        lista->primeiro = NULL;
+        lista->ultimo = NULL;
+        lista->atual = NULL;
+    } 
+    // Caso 2: A lista tem múltiplos elementos
+    else {
+        ElementoLista *anterior = elementoARemover->anterior;
+        ElementoLista *proximo = elementoARemover->proximo;
+        
+        // Como a lista é circular, anterior e proximo sempre serão válidos aqui.
+        anterior->proximo = proximo;
+        proximo->anterior = anterior;
+
+        if (lista->primeiro == elementoARemover) {
+            lista->primeiro = proximo;
+        }
+        if (lista->ultimo == elementoARemover) {
+            lista->ultimo = anterior;
+        }
+    }
+    
+    // Libera a memória. A responsabilidade de liberar conteúdos específicos
+    // dos dados (como texturas) é de quem chama a função.
+    free(elementoARemover->dados);
+    free(elementoARemover);
+    lista->numElementos--;
+    printf("Elemento removido.\n");
+}
+
 
 void Lista_Esvaziar(Lista *lista) {
     if(!lista->criada) {
