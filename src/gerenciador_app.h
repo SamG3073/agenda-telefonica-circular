@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 #include "listalib.h"
-#include "contato.h" // Precisa da definição de Contato
+#include "contato.h" 
 #include "app_types.h"
 
 // Constante global para o nome do arquivo de dados
@@ -16,12 +16,18 @@ void avancarParaProximoVisivel(Lista *lista, CategoriaFiltro filtro);
 void retrocederParaAnteriorVisivel(Lista *lista, CategoriaFiltro filtro);
 void irParaPrimeiroVisivel(Lista *lista, CategoriaFiltro filtro);
 
-// Funções de gerenciamento do formulário
+// Função para resetar o formulário de contato
 void resetarFormulario(FormularioContato* form);
-bool salvarNovoContato(Lista* contatos, FormularioContato* form, SDL_Renderer* r, char* msgErro);
+
+// Função para salvar um novo contato a partir do formulário
+bool salvarNovoContato(Lista* contatos, FormularioContato* form, SDL_Renderer* r, char* msgErro, TTF_Font *font, int h);
 
 // Funções de persistência de dados (carregar/salvar)
 void salvarContatos(Lista* lista, const char* nomeArquivo);
-void carregarContatos(Lista* lista, SDL_Renderer* renderer, const char* nomeArquivo);
+void carregarContatos(Lista* lista, SDL_Renderer* renderer, const char* nomeArquivo, TTF_Font** font);
+
+// Função para calcular o deslocamento Y de um elemento
+float calcularYOffsetParaElemento(Lista* lista, ElementoLista* alvo, CategoriaFiltro filtro, float y_base, float item_h);
+
 
 #endif // GERENCIADOR_APP_H

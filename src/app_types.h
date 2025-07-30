@@ -17,6 +17,13 @@ typedef enum {
     ESTADO_CONFIRMAR_DELETE
 } EstadoAplicacao;
 
+typedef struct {
+    bool animando;
+    float y_atual;
+    float y_alvo;
+    Uint32 tempo_inicio;
+} EstadoAnimacao;
+
 // Enum para as categorias de filtro da UI
 typedef enum {
     FILTRO_TODOS, FILTRO_AMIGOS, FILTRO_FAMILIA, FILTRO_TRABALHO

@@ -4,8 +4,6 @@
 #include <string.h>
 #include "listalib.h"
 
-// ... (funções existentes: Lista_Criar até Lista_RemoverUltimo) ...
-
 void Lista_Criar(Lista *lista, size_t tamanhoElemento, bool duplamenteEncadeada, bool circular) {
     if(lista->criada) {
         printf("Lista já existe.\n");
@@ -137,21 +135,17 @@ void Lista_PercorrerInversamente(Lista *lista, unsigned int numVezesParaPercorre
 }
 
 void Lista_Avancar(Lista *lista) {
-    if(!lista->criada) {
-        printf("Lista não existe.\n");
+    if(!lista || !lista->criada || !lista->atual) {
         return;
     }
-    ElementoLista *proximo = ElementoLista_ObterProximo(lista->atual);
-    if(proximo) lista->atual = proximo;
+    lista->atual = lista->atual->proximo;
 }
 
 void Lista_Retroceder(Lista *lista) {
-    if(!lista->criada) {
-        printf("Lista não existe.\n");
+    if(!lista || !lista->criada || !lista->atual || !lista->duplamenteEncadeada) {
         return;
     }
-    ElementoLista *anterior = ElementoLista_ObterAnterior(lista->atual);
-    if(anterior && lista->duplamenteEncadeada) lista->atual = anterior;
+    lista->atual = lista->atual->anterior;
 }
 
 void Lista_DumpParametros(Lista *lista) {
@@ -202,20 +196,27 @@ void Lista_Inserir(Lista *lista, void *dados) {
     memcpy(elemento_dados, dados, lista->tamanhoElemento);
 
     if(!(lista->numElementos)) {
-        ElementoLista_AtribuirAnterior(elemento, NULL);
-        ElementoLista_AtribuirProximo(elemento, NULL);
+        if (lista->circular) {
+            ElementoLista_AtribuirAnterior(elemento, elemento);
+            ElementoLista_AtribuirProximo(elemento, elemento);
+        } else {
+            ElementoLista_AtribuirAnterior(elemento, NULL);
+            ElementoLista_AtribuirProximo(elemento, NULL);
+        }
         lista->primeiro = elemento;
+        lista->ultimo = elemento;
     }
     else {
         if(lista->duplamenteEncadeada && lista->circular) ElementoLista_AtribuirAnterior(lista->primeiro, elemento);
         ElementoLista_AtribuirProximo(lista->ultimo, elemento);
         ElementoLista_AtribuirAnterior(elemento, lista->duplamenteEncadeada? lista->ultimo : NULL);
         ElementoLista_AtribuirProximo(elemento, lista->circular? lista->primeiro : NULL);
+        lista->ultimo = elemento;
     }
-    lista->ultimo = elemento;
+    
     lista->atual = elemento;
     lista->numElementos++;
-    printf("Elemento inserido.\n");
+    // printf("Elemento inserido.\n");
 }
 
 void Lista_RemoverUltimo(Lista *lista) {
@@ -228,19 +229,11 @@ void Lista_RemoverUltimo(Lista *lista) {
         ElementoLista *antigoUltimo = lista->ultimo;
         
         if(lista->numElementos > 1) {
-            Lista_IrParaPrimeiro(lista);
-            while(ElementoLista_ObterProximo(lista->atual) != antigoUltimo) {
-                Lista_Avancar(lista);
+            lista->ultimo = antigoUltimo->anterior;
+            lista->ultimo->proximo = lista->circular ? lista->primeiro : NULL;
+            if(lista->circular) {
+                lista->primeiro->anterior = lista->ultimo;
             }
-            if(lista->numElementos == 2) {
-                if(lista->duplamenteEncadeada) ElementoLista_AtribuirAnterior(lista->atual, NULL);
-                ElementoLista_AtribuirProximo(lista->atual, NULL);
-            }
-            else {
-                if(lista->duplamenteEncadeada && lista->circular) ElementoLista_AtribuirAnterior(lista->primeiro, lista->atual);
-                ElementoLista_AtribuirProximo(lista->atual, lista->circular? lista->primeiro : NULL);
-            }
-            lista->ultimo = lista->atual;
         }
         else {
             lista->primeiro = NULL;
@@ -262,18 +255,15 @@ void Lista_RemoverElemento(Lista *lista, ElementoLista *elementoARemover) {
         return;
     }
 
-    // Caso 1: A lista só tem um elemento
     if (lista->numElementos == 1) {
         lista->primeiro = NULL;
         lista->ultimo = NULL;
         lista->atual = NULL;
     } 
-    // Caso 2: A lista tem múltiplos elementos
     else {
         ElementoLista *anterior = elementoARemover->anterior;
         ElementoLista *proximo = elementoARemover->proximo;
         
-        // Como a lista é circular, anterior e proximo sempre serão válidos aqui.
         anterior->proximo = proximo;
         proximo->anterior = anterior;
 
@@ -285,31 +275,30 @@ void Lista_RemoverElemento(Lista *lista, ElementoLista *elementoARemover) {
         }
     }
     
-    // Libera a memória. A responsabilidade de liberar conteúdos específicos
-    // dos dados (como texturas) é de quem chama a função.
     free(elementoARemover->dados);
     free(elementoARemover);
     lista->numElementos--;
-    printf("Elemento removido.\n");
+    // printf("Elemento removido.\n");
 }
 
 
 void Lista_Esvaziar(Lista *lista) {
-    if(!lista->criada) {
-        printf("Lista não existe.\n");
+    if(!lista || !lista->criada) {
         return;
     }
     if(!lista->numElementos) {
-        printf("Lista já está vazia.\n");
         return;
     }
-    Lista_IrParaPrimeiro(lista);
-    for(unsigned int i = 0; i < lista->numElementos; ++i) {
-        ElementoLista *proximoASerLiberado = ElementoLista_ObterProximo(lista->atual);
-        free(ElementoLista_ObterDados(lista->atual));
-        free(lista->atual);
-        if(proximoASerLiberado) lista->atual = proximoASerLiberado;
-    }
+
+    ElementoLista* atual = lista->primeiro;
+    ElementoLista* proximo;
+    do {
+        proximo = atual->proximo;
+        free(ElementoLista_ObterDados(atual));
+        free(atual);
+        atual = proximo;
+    } while(atual != lista->primeiro);
+
     lista->numElementos = 0;
     lista->primeiro = NULL;
     lista->ultimo = NULL;
@@ -332,25 +321,25 @@ void ElementoLista_Dump(ElementoLista *elemento, size_t tamanhoDados) {
 }
 
 byte *ElementoLista_ObterDados(ElementoLista *elemento) {
-    return elemento->dados;
+    return elemento ? elemento->dados : NULL;
 }
 
 void *ElementoLista_ObterAnterior(ElementoLista *elemento) {
-    return elemento->anterior;
+    return elemento ? elemento->anterior : NULL;
 }
 
 void *ElementoLista_ObterProximo(ElementoLista *elemento) {
-    return elemento->proximo;
+    return elemento ? elemento->proximo : NULL;
 }
 
 void ElementoLista_AtribuirDados(ElementoLista *elemento, byte *dados) {
-    elemento->dados = dados;
+    if(elemento) elemento->dados = dados;
 }
 
 void ElementoLista_AtribuirAnterior(ElementoLista *elemento, ElementoLista *anterior) {
-    elemento->anterior = anterior;
+    if(elemento) elemento->anterior = anterior;
 }
 
 void ElementoLista_AtribuirProximo(ElementoLista *elemento, ElementoLista *proximo) {
-    elemento->proximo = proximo;
+    if(elemento) elemento->proximo = proximo;
 }
