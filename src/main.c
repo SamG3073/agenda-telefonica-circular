@@ -20,11 +20,11 @@ int main(int argc, char *argv[]) {
 
     TTF_Font *fonte_cabecalho = NULL, *fonte_nomeContato = NULL, *fonte_numeroContato = NULL, *fonte_iniciais = NULL;
     UI_Icones icones_ui;
-    icones_ui.telefone = carregarTextura(renderizador, "assets/icons/telefone.svg");
-    icones_ui.whatsapp = carregarTextura(renderizador, "assets/icons/whatsapp.svg");
-    icones_ui.sms = carregarTextura(renderizador, "assets/icons/sms.svg");
-    icones_ui.facebook = carregarTextura(renderizador, "assets/icons/facebook.svg");
-    icones_ui.gmail = carregarTextura(renderizador, "assets/icons/gmail.svg");
+    icones_ui.telefone = carregarTextura(renderizador, "src/assets/icons/telefone.svg");
+    icones_ui.whatsapp = carregarTextura(renderizador, "src/assets/icons/whatsapp.svg");
+    icones_ui.sms = carregarTextura(renderizador, "src/assets/icons/sms.svg");
+    icones_ui.facebook = carregarTextura(renderizador, "src/assets/icons/facebook.svg");
+    icones_ui.gmail = carregarTextura(renderizador, "src/assets/icons/gmail.svg");
 
     Lista contatos = {0};
     Lista_Criar(&contatos, sizeof(Contato), true, true);
@@ -71,8 +71,8 @@ int main(int argc, char *argv[]) {
             int tam_num = fmax(h / 45, 8);
             int tam_iniciais = fmax(item_h * 0.3, 14);
 
-            const char* caminho_fonte_bold = "assets/fonts/DejaVu_Sans/DejaVuSans-Bold.ttf";
-            const char* caminho_fonte_regular = "assets/fonts/DejaVu_Sans/DejaVuSans.ttf";
+            const char* caminho_fonte_bold = "src/assets/fonts/DejaVu_Sans/DejaVuSans-Bold.ttf";
+            const char* caminho_fonte_regular = "src/assets/fonts/DejaVu_Sans/DejaVuSans.ttf";
 
             fonte_cabecalho = TTF_OpenFont(caminho_fonte_bold, tam_cabecalho);
             if (!fonte_cabecalho) printf("ERRO: Falha ao carregar fonte '%s': %s\n", caminho_fonte_bold, TTF_GetError());
