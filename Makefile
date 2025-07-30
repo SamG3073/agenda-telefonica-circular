@@ -5,7 +5,7 @@ CC = gcc
 EXEC = agenda_contatos
 
 # Arquivos-fonte (.c)
-SRCS = main.c gerenciador_app.c contato.c listalib.c
+SRCS = src/main.c src/gerenciador_app.c src/contato.c src/listalib.c
 
 # Arquivos-objeto (.o) - gerados automaticamente a partir dos .c
 OBJS = $(SRCS:.c=.o)

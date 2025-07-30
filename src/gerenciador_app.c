@@ -73,7 +73,7 @@ void carregarContatos(Lista* lista, SDL_Renderer* renderer, const char* nomeArqu
         else if (strcmp(linha, "---") == 0) {
             
             if (c_temp.caminhoImagem[0] == '\0') {
-                strcpy(c_temp.caminhoImagem, "assets/images/fotoPerfil.png");
+                strcpy(c_temp.caminhoImagem, "src/assets/images/fotoPerfil.png");
             }
             
             c_temp.texturaPerfil = carregarTextura(renderer, c_temp.caminhoImagem);
@@ -115,7 +115,7 @@ bool salvarNovoContato(Lista* contatos, FormularioContato* form, SDL_Renderer* r
     strcpy(c.email, form->email);
     c.grupo = form->grupo;
     
-    strcpy(c.caminhoImagem, "assets/images/fotoPerfil.png");
+    strcpy(c.caminhoImagem, "src/assets/images/fotoPerfil.png");
     
     c.texturaPerfil = carregarTextura(r, c.caminhoImagem);
     c.usaIniciais = false;
