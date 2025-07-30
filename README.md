@@ -17,8 +17,9 @@ Modo Tela Cheia:
 <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/152555c6-952e-452e-b850-86cb714577c3" />
 
 # Compilação
-Para compilar o arquivo binário do programa em um ambiente Linux, os seguintes pacotes devem estar instalados:
+Para clonar esse repositório e compilar o código-fonte, os seguintes pacotes devem estar instalados:
 
++ git
 + gcc
 + make
 + libsdl2-dev
@@ -26,22 +27,19 @@ Para compilar o arquivo binário do programa em um ambiente Linux, os seguintes 
 + libsdl2-ttf-dev
 
 ## Debian/Ubuntu
-### Instalação dos pacotes
+### Preparação
 Em um sistema ou ambiente Debian ou Ubuntu, digite os seguintes comandos no terminal, um por um:
 
 ```
 $ sudo apt update
-$ sudo apt install -y gcc make libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
-```
-
-### Compilando o executável
-Faça o download desse repositório e extraia na pasta de sua preferência. Caso você tenha o Git instalado e queira usá-lo para clonar o repositório diretamente, digite o seguinte no terminal:
-
-```
+$ sudo apt install -y git gcc make libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
 $ git clone https://github.com/SamG3073/agenda-telefonica-circular.git
+$ cd agenda-telefonica-circular
 ```
 
-Em seguida, abra uma janela do terminal na raiz do repositório, na mesma pasta onde estão este Readme e o Makefile, e execute:
+### Compilação e execução
+
+Na mesma janela de terminal de antes, digite o seguinte:
 
 ```
 $ make
@@ -58,4 +56,35 @@ Agora você pode executar o programa dando dois cliques nele em um explorador de
 
 ```
 $ ./agenda_contatos
+```
+
+## Windows
+### Preparação
+Faça o download e instalação do [MSYS2](https://www.msys2.org/). Em seguida, abra o terminal "MSYS2 MINGW64" e digite esses comandos, um por um:
+
+```
+$ pacman -Syu
+$ pacman -S --needed mingw-w64-x86_64-toolchain mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_image mingw-w64-x86_64-SDL2_ttf git
+$ git clone https://github.com/SamG3073/agenda-telefonica-circular.git
+$ cd agenda-telefonica-circular
+```
+
+Observações:
+
++ Para qualquer pergunta que aparecer na tela, basta pressionar Enter para aceitar os valores padrão.
++ Por algum motivo, o terminal do MSYS2 adiciona um caractere oculto que pode impossibilitar a execução do comando ao colar usando `Ctrl + Shift + V`. Por isso, certifique-se de usar o menu de contexto `(Botão direito do mouse > Paste)` ao colar os comandos.
+
+### Compilação e execução
+No mesmo terminal do MSYS2, basta digitar:
+
+```
+$ mingw32-make
+```
+
+Isso compilará o binário do programa, que aparecerá na pasta raiz do repositório.
+
+Em seguida, para executar o programa, digite:
+
+```
+$ ./agenda_contatos.exe
 ```
