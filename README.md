@@ -8,6 +8,10 @@ Modelo base de inspiração:
 
 Prévia:
 
-<img width="360" height="666" alt="image" src="https://github.com/user-attachments/assets/09c27e7a-e2e4-4cd9-9063-d761e2745424" />
-<img width="360" height="668" alt="image" src="https://github.com/user-attachments/assets/6772b485-7c5b-4815-beb3-43117351d3a2" />
+<img width="362" height="640" alt="image" src="https://github.com/user-attachments/assets/db58cd9c-dd77-4083-bfdb-505dd27eb442" />
+<img width="359" height="643" alt="image" src="https://github.com/user-attachments/assets/3956ac7a-3d02-4f6c-bc52-99f5ed7cf0e3" />
 
+Modo Tela Cheia:
+
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/779b9da8-7f3b-4417-bd71-5dfb0f0048a3" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/152555c6-952e-452e-b850-86cb714577c3" />
